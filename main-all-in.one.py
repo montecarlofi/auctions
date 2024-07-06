@@ -200,7 +200,7 @@ def histogram(y_values, title='', undertitle=None, extent=[0.2, 1.1], step=.01):
 	   		x = alt.X(undertitle, axis=alt.Axis(tickCount=0, tickMinStep=.1, grid=False), bin=alt.Bin(extent=extent, step=step)),
 	   	).configure_mark(
 	   		color = 'black', # #ff3399 is nice pink  #FF4B4B is streamlit red  # is streamlit red transparent  # #1F77B4 is pyplot blue
-	   		opacity = 0.75
+	   		opacity = 0.90
 	   	).configure_text(
 	   		color = 'pink'
 	   	)
