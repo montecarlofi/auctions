@@ -31,7 +31,7 @@ import altair as alt
 # Streamlit
 Controls0, Controls1, Plotter, Histogram = st.columns([2, 2, 6, 4])
 with Controls0:
-	n_games = st.slider('N games', min_value=100, max_value=10**3, value=100, step=100, key=f"key_n_games", disabled=False)
+	n_games = st.slider('N games', min_value=100, max_value=10**4, value=100, step=100, key=f"key_n_games", disabled=False)
 	n_max_players = st.slider('max players', min_value=2, max_value=50, value=50, step=1, key=f"key_n_max_players", disabled=False)
 	n_min_players = st.slider('min players', min_value=2, max_value=50, value=2, step=1, key=f"key_n_min_players", disabled=True)
 	mean_valuation = st.slider('mean valuation', min_value=.5, max_value=1.5, value=.8, step=.5, key=f"key_mean_valuation", disabled=True)
