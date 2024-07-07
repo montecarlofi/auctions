@@ -42,8 +42,8 @@ with Controls1:
 	time_mode = st.slider('time mode', min_value=1, max_value=2, value=1, step=1, key=f"key_time_mode", disabled=True)
 
 # User variables (from userinterface; uncomment these when not using a GUI)
-#n_games = 100
-#n_max_players = 10
+n_games = 10**4
+n_max_players = 50
 #n_min_players = 2
 #mean_valuation = 0.8
 #beta_population = 2.25
