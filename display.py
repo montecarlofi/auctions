@@ -4,6 +4,118 @@ import altair as alt
 import numpy as np
 import matplotlib.pyplot as plt
 
+def streamlit_hide():
+	hide_streamlit_style = """
+	            <style>
+	            #MainMenu {visibility: hidden;}
+	            footer {visibility: hidden;}
+	            </style>
+	            """
+	st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
+	st.markdown("""
+	<style>
+	div[data-testid="metric-container"] {
+	   background-color: rgba(240, 242, 246, 0.7);
+	   border: 1px solid rgba(240, 242, 246, 0.7);
+	   padding: 10% 10% 10% 10%;
+	   border-radius: 5px;
+	   color: rgb(30, 103, 119);
+	   overflow-wrap: break-word;
+	}
+
+	/* breakline for metric text         */
+	div[data-testid="metric-container"] > label[data-testid="stMetricLabel"] > div {
+	   overflow-wrap: break-word;
+	   white-space: break-spaces;
+	   color: black;
+	}
+	</style>
+	"""
+	, unsafe_allow_html=True)
+
+	#st.metric(label="This is a very very very very very long sentence", value="70 °F")
+
+
+def style():
+	# Custom HTML/CSS for the banner
+	custom_html = """
+	<div class="banner">
+	    <img src="B:/Python/auction/logo.jpg" alt="Auction Simulator">
+	</div>
+	<style>
+	    .banner {
+	        width: 160%;
+	        height: 200px;
+	        overflow: hidden;
+	    }
+	    .banner img {
+	        width: 100%;
+	        object-fit: cover;
+	    }
+	</style>
+	"""
+	# Display the custom HTML
+	st.components.v1.html(custom_html)
+
+
+def head():
+	st.markdown(
+	    """
+	    <style>
+	    header[data-testid="stHeader"]{
+	        background-image: url(B:/Python/auction/logo.jpg);
+	        background-repeat: repeat;
+	        background-size: contain;
+	        height: 10%;
+	    }
+	    
+	    section[data-testid="stSidebar"] {
+	        top: 10%; 
+	      }
+	    </style>""",
+	    unsafe_allow_html=True,
+	)
+	st.image('logo.jpg', width=50)
+
+
+def head2():
+	import base64
+
+	LOGO_IMAGE = "B:/Python/auction/logo.jpg"
+
+	st.markdown(
+	    """
+	    <style>
+	    .container {
+	        display: flex;
+	    }
+	    .logo-text {
+	        font-weight:70 !important;
+	        font-size:40px !important;
+	        color: #666 !important;
+	        padding-top: 25px !important;
+	        padding-left: 50px;
+	    }
+	    .logo-img {
+	        float:right;
+	    }
+	    </style>
+	    """,
+	    unsafe_allow_html=True
+	)
+
+	st.markdown(
+	    f"""
+	    <div class="container">
+	        <img class="logo-img" height="100px" src="data:image/png;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}">
+	        <p class="logo-text"> Auction simulator </p>
+	    </div>
+	    """,
+	    unsafe_allow_html=True
+	)
+
+
 def plot_n_players(colosseum, n_bins=None):
 	#sums = [colosseum[x].sum() for x in np.arange(0,colosseum.shape[0])]
 	#sums = np.array([*sums])
