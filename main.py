@@ -96,6 +96,7 @@ from beta import beta_distribution  # Library made for this sim.
 
 
 # Visual interface and presentation structure
+disp.streamlit_hide(st.markdown)
 #disp.head2()
 #st.subheader('Auction simulation')
 #st.markdown("<h3 style='text-align: center; color: darkgrey;'>A u c t i o n &nbsp;&nbsp; s i m u l a t o r</h3>", unsafe_allow_html=True)
