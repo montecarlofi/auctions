@@ -81,7 +81,7 @@
 #
 #
 import streamlit as st; st.set_page_config(layout="wide")
-#import plotly.express as px
+import plotly.express as px
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -95,21 +95,43 @@ from beta import beta_distribution  # Library made for this sim.
 #from gamma import gamma_distribution  # Library made for this sim.
 
 
+# Visual interface and presentation structure
+#disp.head2()
+#st.subheader('Auction simulation')
+#st.markdown("<h3 style='text-align: center; color: darkgrey;'>A u c t i o n &nbsp;&nbsp; s i m u l a t o r</h3>", unsafe_allow_html=True)
+#st.markdown("<span style='color: pink; centered: centered; text-alignment: center'>Auction simulator I</span>", unsafe_allow_html=True)
+tab_sim, tab_info, tab_quick, tab_comments = st.tabs(['Simulator', 'Info', 'Quick start', 'Technical comments'])
+with tab_sim:
+	Controls0, Controls1, Plotter, Histogram = st.columns([2, 2, 6, 4])
+with tab_info:
+	txt = open('info.txt','r').read()
+	st.markdown(txt)
+with tab_quick:
+	txt = open('quick-start.txt','r').read()
+	st.markdown(txt)
+with tab_comments:
+	txt = open('comments.txt','r').read()
+	st.markdown(txt)
+
+
 # User variables (Streamlit)
-Controls0, Controls1, Plotter, Histogram = st.columns([2, 2, 6, 4])
 with Controls0:
 	n_games = st.slider('N games', min_value=100, max_value=10**4, value=100, step=100, key=f"key_n_games", disabled=False)
-	n_max_players = st.slider('max players', min_value=2, max_value=50, value=50, step=1, key=f"key_n_max_players", disabled=False)
-	n_min_players = st.slider('min players', min_value=2, max_value=50, value=2, step=1, key=f"key_n_min_players", disabled=True)
+	#n_max_players = st.slider('max players', min_value=2, max_value=50, value=50, step=1, key=f"key_n_max_players", disabled=False)
+	#n_min_players = st.slider('min players', min_value=2, max_value=50, value=2, step=1, key=f"key_n_min_players", disabled=True)
+	slider = st.select_slider("players", list(range(2, 51)), value=(2, 50))
+	n_min_players, n_max_players = slider[0], slider[1]
 	mean_valuation = st.slider('mean valuation', min_value=.5, max_value=1.5, value=.8, step=.5, key=f"key_mean_valuation", disabled=True)
+	n_snipers = st.slider('snipers', min_value=0, max_value=10, value=0, step=1, key=f"key_n_snipers", disabled=True)
 with Controls1:
 	beta_valuation = st.slider('β valuation', min_value=1., max_value=32., value=2.5, step=.25, key=f"key_beta_valuation", disabled=False)
 	beta_population = st.slider('β population', min_value=1., max_value=16., value=2.25, step=.25, key=f"key_beta_population", disabled=False)
-	attention_threshold = st.slider('attention tresh.', min_value=2, max_value=50, value=2, step=1, key=f"key_attention_threshold", disabled=True)
-	time_mode = st.slider('time mode', min_value=1, max_value=2, value=1, step=1, key=f"key_time_mode", disabled=True)
+	attention_threshold = st.slider('attention treshold', min_value=0., max_value=1., value=.95, step=.05, key=f"key_attention_threshold", disabled=True)
+	time_mode = st.slider('time mode', min_value=0, max_value=1, value=0, step=1, key=f"key_time_mode", disabled=True)
+	#time_mode = st.slider("time mode", ['fixed', 'extended'], value='fixed')
 
-# User variables (from userinterface; uncomment these when not using a Streamlit/GUI)
-#n_games, n_max_players = 10**5, 50
+# User variables (from userinterface; uncomment these when not using a GUI/Streamlit)
+#n_games, n_max_players = 10**4, 50
 #n_max_players = 10
 #n_min_players = 2
 #mean_valuation = 0.8
@@ -134,30 +156,28 @@ timing = ['start', 'mid', 'endgame']
 sensitivity_to_jumps = [0, 1] # [1] is synonymous to saying, "I'll just test the waters, and see if I can get the item for cheap. If not, I'll leave." In other words, jump-sensitivity ≈ low valuation.
 
 
-# Sim variables III — three matrices that will be 
-attentions = np.zeros([m, n]).astype('float32')
-bids = np.zeros([m, n]).astype('float32') ### - 1
-overlay = np.zeros([m, n]).astype('int8')
-#players = np.zeros([m, n]).astype('bool')  # Temp representation of colosseum.
+# Sim variables III — three matrices that will be used throughout
+bids = np.zeros([m, n]).astype('float32')		 # Updated each round
+attentions = np.zeros([m, n], order='F').astype('float32')	 # Re-used each round
+overlay = np.zeros([m, n]).astype('int8')		 # Re-used each round
+#players = np.zeros([m, n]).astype('bool')  	 # Re-used each round. Temp representation of colosseum.
 
 
-# Random valuations
+# Get random valuations
 valuations = beta_distribution(mean_valuation, 0, upper_bound, n_games, n_max_players, beta_=beta_valuation).astype('float32')  # For flat array: 1, n_games*n_max_players
 
 
-# Random population
+# Populate the Colosseum
 prob_dist = beta_distribution(n_max_players/2, lower_bound=n_min_players, upper_bound=n_max_players, rows=1, cols=n_games*n_max_players, beta_=beta_population).astype('float32')
-#prob_dist = prob_dist.squeeze(axis=0)
-#print(prob_dist); exit()
-prob_dist = prob_dist[0]  # Flat array (that is, [] and not [[]]).
+prob_dist = prob_dist.squeeze(axis=0)  # Reduce by one dimension (to [] from [[]]).
 colosseum = colosseo.populate([n_games, n_max_players], nmin=n_min_players, prob_dist_type='biased', probability_dist=prob_dist).astype('float32')  # 'uniform' or 'biased' → 'uniform' is ~5.5x faster
 indices = np.where(colosseum == 1)
-colosseum[indices] = valuations[indices]  # colosseum[colosseum == 1] = valuations would be faster? Large indices are usually CPU/RAM heavy.
+colosseum[indices] = valuations[indices]  # colosseum[colosseum == 1] = valuations[np.where(colosseum == 1)]
 
 
-# Clean up and save some memory
+# Clean up and save RAM
 indices = None
-valuations = valuations[:1000]  # Lets free up and save some memory, just in case.
+valuations = valuations[:1000]  # We keep 1000 data points to display the distribution later.
 prob_dist = prob_dist[:1000]    # Same.
 
 
@@ -225,6 +245,10 @@ avg[:] = winners_mean
 
 
 # Results to visual presentation
+with Controls0:
+	#st.write("Sim time:", round(end_loop-start_loop, 4), 'sec')
+	pass
+
 with Plotter:
 	#disp.scatter(winners_vals)
 
@@ -240,9 +264,11 @@ with Plotter:
 	st.pyplot(plt.gcf())
 
 	st.write("Simulation run time: ", round(end_loop-start_loop, 4), ' seconds')
-	# Look at error bars for graphing in an alternative way.
 
+	# Look at error bars for graphing in an alternative way.
 
 with Histogram:
 	disp.histogram(valuations.ravel()[:1000], title='', undertitle='valuation distribution')  # The first 1000 is ok; more makes the visualisation slow.
 	disp.histogram(prob_dist[:1000], extent=[2, 50], title='', undertitle='game population distribution')  # The first 1000 is ok; more makes the visualisation slow.
+
+#st.subheader('Auction simulation')

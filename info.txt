@@ -1,0 +1,22 @@
+
+ Simulation to discover how auction features affect price and promote different strategic behaviours.   
+ The companion paper "Man of steal" explains the rules and provides justification for the variables  
+ and their vaules and value ranges. 
+
+#### The simulation
+
+ Sequence is as follows:
+ 1. populate the auction house with many auctions (games) and give each player a random valuation  
+    according to certain probability density functions
+ 2. initialise first round, then repeat steps 3-5
+ 3. remove those not within own valuation 
+ 4. select from attentive players
+ 5. place bid
+
+ At game over, the highest bidders win.
+
+ 
+
+ #
+
+ *(c) Mikal Rian 2023, 2024*

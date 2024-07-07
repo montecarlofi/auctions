@@ -1,0 +1,35 @@
+### Technical commentary
+
+This simulation is not generic; its premise is an imagined used car auction house with bids being made online. The cars can be inspected and test driven in person. Similar cars are also readily available in other second-hand markets. The reason we consider the specific case of used cars is that not every auction type is the same. Real estate is more open-ended, art is even more so, but it is unlikely someone would be overprice for an item they could easily acquire on a different marketplace and of which there are many of a similar kind. Thus there is a natural upper bound for the value agents would place in any given item. Naturally, states auctioning off bands of the electromagnetic spectrum or auction houses putting up ultra rare objects such as famous people's watches and cars are completely different in their bidding and pricing dynamics. The same is true for cheap-item auctions where one can test out different strategies at little cost. Each auction type, with its particular characteristics, requires a different model. The present model, while adaptable to many types, recreates the main dynamics of used-car auctions. 
+
+The components acting out their effects on each other (and the final price) are the following. 
+
+###### Valuations
+We can assume a "true value," a mean that only the Creator and the Universe know that players will pay on average. A problem arises when trying to find out what people would truly be willing to pay: To collecta data on what participants in online auctions recorded (if applicable) as their valuation or max bid is subject to change throughout the game. A mechanism for registering such changes may or may not be present in the entity's algorithms and databases. Since players can change their mind during, these data are not to be trusted as true valuations. We could assume that the winners' bids indicate the average valuation, but that is of course not correct; it only indicates the average winning bid, which could be right at or below the valuations of the highest bidders. And the valuations of the other players were clearly lower, since they didn't win. Asking people what they'd be willing to pay, at the maximum, is unreliable, since they may change their mind during the game, subject to their own and the game's emergent psychology. 
+These valuations may be close within one another or they may be spread out. 
+
+There are many factors behind how a person determines what she's willing to pay for something: how easily it can be attained other places, what she think it is worth, what she believes others think it is worth, and, not least, the in-game psychology of players with different strategies and reactions. Sometimes people have one, initial max bid (something they decided in their mind or on a web page) which they may or may not reconsider while the game is still ongoing. I think we can neatly sum up all these factors in "valuation,"" which is simply what the player in the end is willing to pay. 
+
+Valuations, normalised to 1 (100% of the price) in this simulation, are distributed around some assumed mean (an average of all players' valuations). We suppose players on average will pay below market price. This would be the reason they sought out the auction in the first place. We may also suppose not all players have reasonable valuations. They can be mistaken, delusional, or just out trying their luck. Thus it makes sense to experiment with different spreads. The simulation is fixed with an upper bound of 105%, operating under the assumption that very few people, if any, would pay much more in an auction than what they'd have to pay in the regular market. This variable is not made interactive, but, of course, it can be altered in the code. 
+
+Valuations can go from 0 to 1.05 in the simulation. 
+
+The mean is set to 0.8 by default (my estimated guess for real life is 80-90% of regular second-hand marketplace). This means the valuations of players hover around the mean by some measure. They can be distant or close. 
+
+###### B valuation
+A beta function is behind the probability distribution, thus the name B valuation (and B population). The normal (Gaussian) distribution does not stop at any specific deviation, thus has no hard upper or lower bounds. The beta distribution is constricted to 0 to 1. You may change the longness/fatness of its tail towards 0. 
+
+###### N players
+For any real-life auction, we should be able to observe an average amount of participants by item type and auction type. How the number of players is distributed around some observed mean should be possible to assume or estimate given enough data. In this simulation, the average number of players is assumed to be in the range 15-35, with a max of 50. The minimun is 2 players. Any less, and no bidding would take place. 
+
+###### B population
+The player distribution can be set to be uniform (any number of players between 2 to 50 is equally probable when the variable is set to 1.0) or any degree of concentration/dispersion the user desires to experiment with.
+
+###### Snipers
+"Snipers" are players whose strategy is to wait with their bid until the very last second or minute of the game. This minimises the opportunity for other players to think, decide, and place a bid. Such a strategy is effective depending on timing, auction rules, the presence of other snipers, and the attention of other players in the game. 
+
+###### Attention
+In the final round of the game, all players may place a bid if they are attentive. This influences the effectiveness of the sniping strategy. 
+
+###### Time mode
+The time modes are 'fixed' and 'extended' (0 and 1 respectively). The first means the game is over when time is up; the second means the last round is extended, open for new bids, until no more bids continue to extend it.

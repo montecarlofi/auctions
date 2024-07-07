@@ -1,0 +1,21 @@
+### Quick start
+
+Every auction ("game" from now on) has a number of players and a time of duration. Each player has her own, private valuation of the item in her game. Valuations can be spread out far or concentrated around some assumed mean.  
+
+Each game has numerous bidding rounds. How we conceptualise rounds as events in either discreet or continuous time is commented in the paper and the technical tab here. In each round there is one bid. The current highest bidder does not bid in the present round. In each round, the players whose valuations are exceeded are dropped. From the remaining ones, one is randomly selected to place the next bid. A new round begins, a few players possibly dropped, and so on. When time/rounds are up, the highest bidders win. 
+
+###### I invite you, dear reader, to explore the phenomena that may emerge when the variables change. 
+
+#### Interactive parts:
+
+* *N games*, the number of simulations performed by the algorithm
+* _max players_, the max possible amount of players in any given game
+* _valuation_, the spread of valuations (1.0 gives a long tail, anything from 8 gives a tight concentration)
+* _population_, the spread of how players to be present in any game (1.0 is uniform (all numbers equally probable), 4 is moderate around the mean (25), and higher is tighter around the mean)
+* _time mode_, 0 means no last-minute time extension, 1 means time extends (until no more bids)
+* _min players_, min possible number of players in any game
+* _mean valuation_, the average valuation of all players, regardless of the distribution characteristics
+* _attention threshold_, the probability of being present in the final round (including extensions) and being able to place a bid
+* _snipers_, the number of last-second bidders
+
+This interactive version of the simulation was created so that anyone can look at the effects of various variable configurations, plus inspect the internal workings of the algorithm (available here: github.com/montecarlofi/auctions.git).
