@@ -1,6 +1,6 @@
 
  Simulation to discover how auction features affect price and promote different strategic behaviours.   
- The companion paper "Man of steal" explains the rules and provides justification for the variables  
+ The companion paper _No title_ explains the rules and provides justification for the variables  
  and their vaules and value ranges. 
 
 #### The simulation
