@@ -110,8 +110,10 @@ with tab_quick:
 	txt = open('quick-start.txt','r').read()
 	st.markdown(txt)
 with tab_comments:
-	txt = open('comments.txt','r').read()
-	st.markdown(txt)
+	st.write("### Technical commentary")
+	txt = open('comments-intro.txt','r').read(); st.markdown(txt)
+	st.image('beta.jpg', width=380)
+	txt = open('comments.txt','r').read(); st.markdown(txt)
 
 
 # User variables (Streamlit)
